@@ -18,7 +18,7 @@ app.get("/", function (request, response) {
 });
 
 app.get("/img/:term/:offset", function(request, response) {
-  const client = new GoogleImages('CSE ID', 'API KEY');
+  const client = new GoogleImages('CSE ID', 'AIzaSyDmSfdEjT12w_Zy0oTPOhswd7y7i6HSABU');
   
   client.search(request.params.term, {page: request.params.offset})
     .then(images => {
