@@ -18,25 +18,22 @@ app.get("/", function (request, response) {
 });
 
 app.get("/img/:term/:offset", function(request, response) {
-  const client = new GoogleImages('CSE ID', 'AIzaSyDmSfdEjT12w_Zy0oTPOhswd7y7i6HSABU');
+  const client = new GoogleImages('012103343266811273655:at3faocvpu0', 'AIzaSyDmSfdEjT12w_Zy0oTPOhswd7y7i6HSABU');
   
   client.search(request.params.term, {page: request.params.offset})
     .then(images => {
-      response.send(images);
-        /*
-        [{
-            "url": "http://steveangello.com/boss.jpg",
-            "type": "image/jpeg",
-            "width": 1024,
-            "height": 768,
-            "size": 102451,
-            "thumbnail": {
-                "url": "http://steveangello.com/thumbnail.jpg",
-                "width": 512,
-                "height": 512
-            }
-        }]
-         */
+    // response.send(images);
+      var result = []; 
+        images.forEach(function(element){
+          result.push({
+            url: element.url, 
+            snippet: element.description, 
+            thumbnail: element.thumbnail.url,
+            context: element.parentPage,
+          })
+        });
+    
+        response.send(result);
     });
 });
 
