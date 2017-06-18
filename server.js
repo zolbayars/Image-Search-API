@@ -71,6 +71,47 @@ function connectToMongo(callback){
   });
 }
 
+function saveURL(collection, origURL, callback){
+  
+  // do some work here with the database.
+  collection.find({}, {_id: 1}).toArray(function (err, value) { 
+
+    var lastId = value[value.length - 1]; 
+    var id = 0; 
+
+    if(lastId != undefined){
+      id = lastId._id + 1; 
+    }
+
+    var newURL = {
+      _id: id, 
+      url: origURL,
+      createdAt: new Date(), 
+    }
+
+    collection.insert(newURL, function(err,docsInserted){
+
+      var result = {
+        error: "Could not insert you URL",
+      }
+
+      if(!err){
+        var insertedId = docsInserted.insertedIds;
+        var shortURL = "https://lavender-drum.glitch.me/to/"+insertedId;
+        dreams.push(shortURL);
+        result = {
+          original_url: origURL,
+          short_url: shortURL
+        }
+        callback(result);
+      }else{
+        callback(result);
+      }
+
+    }); 
+  });
+}
+
 app.get("/dreams", function (request, response) {
   response.send(dreams);
 });
